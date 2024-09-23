@@ -41,7 +41,7 @@ const autoSlide = () => {
 }
 const dragStart = (e) => {
     isDragingStart = true;
-    prevPageX = e.pageX;
+    prevPageX = e.pageX || e.touches[0].pageX;
     prevScrollLeft = imagesConstainer.scrollLeft;
     e.preventDefault();
 }
@@ -52,7 +52,7 @@ const dragging = (e) =>{
     isDragging = true;
     e.preventDefault();
     imagesConstainer.classList.add("dragging")
-    positionDiff = e.pageX - prevPageX
+    positionDiff = ( e.pageX || e.touches[0].pageX ) - prevPageX
     imagesConstainer.scrollLeft = prevScrollLeft - positionDiff;
 }
 const dragEnd = () => {
@@ -81,9 +81,15 @@ const infiniteScroll = () => {
     if (!imagesConstainer.matches(":hover")) autoPlay(); 
 }
 imagesConstainer.addEventListener("mousemove" , dragging)
+imagesConstainer.addEventListener("touchmove" , dragging)
+
 imagesConstainer.addEventListener("mousedown" , dragStart)
-document.addEventListener("mouseup" , dragEnd)
+imagesConstainer.addEventListener("touchstart" , dragStart)
+
 imagesConstainer.addEventListener("mouseleave" , dragEnd)
+imagesConstainer.addEventListener("touchend" , dragEnd)
+
+document.addEventListener("mouseup" , dragEnd)
 imagesConstainer.addEventListener("scroll" , infiniteScroll)
 imagesConstainer.addEventListener("mouseenter" , ()=>clearTimeout(timeoutId))
 imagesConstainer.addEventListener("mouseleave" , autoPlay)
