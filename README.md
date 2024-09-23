@@ -1,0 +1,1 @@
+# task2-CodeMasters-ImageSlider
